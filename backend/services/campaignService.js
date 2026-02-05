@@ -31,21 +31,45 @@ export const computeStats = (campaign) => {
 
 // Simulation impressions et clicks
 export const simulateActivity = async (campaign) => {
-    if (campaign.status === "active") {
-        const newImpressions = Math.floor(Math.random() * 5) + 1;
-        campaign.impressions += newImpressions;
+    if (campaign.status !== "active") return campaign;
 
-        const maxClicks = Math.min(campaign.impressions, Math.floor(campaign.budget));
-        let newClicks = Math.floor(newImpressions * Math.random() * 0.1);
-        if (campaign.clicks + newClicks > maxClicks) newClicks = maxClicks - campaign.clicks;
+    const now = new Date();
 
-        campaign.clicks += newClicks;
-
-        if (campaign.clicks >= campaign.impressions) {
-            campaign.status = "finished";
-        }
-
+    if (campaign.endDate < now) {
+        campaign.status = "finished";
         await campaign.save();
+        return campaign;
     }
+
+    const newImpressions = Math.floor(Math.random() * 10) + 1; 
+    campaign.impressions += newImpressions;
+
+    const budgetRemaining = campaign.budget - campaign.clicks;
+
+    if (budgetRemaining <= 0) {
+        campaign.status = "finished";
+        await campaign.save();
+        return campaign;
+    }
+
+    const ctr = 0.05 + Math.random() * 0.15;
+    let newClicks = Math.floor(newImpressions * ctr);
+
+    if (newClicks < 1 && budgetRemaining > 0) {
+        newClicks = 1;
+    }
+
+    if (newClicks > budgetRemaining) {
+        newClicks = budgetRemaining;
+    }
+
+    campaign.clicks += newClicks;
+
+    if (campaign.clicks >= campaign.budget) {
+        campaign.status = "finished";
+    }
+
+    await campaign.save();
     return campaign;
-}
+};
+

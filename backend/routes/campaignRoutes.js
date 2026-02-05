@@ -3,15 +3,15 @@ import { createCampaign, listCampaigns, getCampaign, updateCampaignStatus, getSt
 
 import { validateCampaign } from "../middlewares/validateCampaign.js";
 import { validateStatus } from "../middlewares/validateStatus.js";
-import { autoFinishCampaign } from "../middlewares/autoFinishCampaign.js";
+import { autoCampaign } from "../middlewares/autoCampaign.js";
 
 const router = express.Router();
 
 router.post("/", validateCampaign, createCampaign);
-router.get("/", listCampaigns);
-router.get("/:id", autoFinishCampaign, getCampaign);
-router.patch("/:id/status", autoFinishCampaign, validateStatus, updateCampaignStatus);
-router.get("/:id/stats", autoFinishCampaign, getStats);
-router.post("/:id/simulate", autoFinishCampaign, simulate);
+router.get("/",listCampaigns);
+router.get("/:id", autoCampaign, getCampaign);
+router.patch("/:id/status", autoCampaign, validateStatus, updateCampaignStatus);
+router.get("/:id/stats", autoCampaign, getStats);
+router.post("/:id/simulate", autoCampaign, simulate);
 
 export default router;
