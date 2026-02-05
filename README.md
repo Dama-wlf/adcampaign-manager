@@ -14,10 +14,16 @@ Fonctionnalités principales :
 
 - Liste des campagnes avec stats et status (activer/pause/terminer)  
 - Formulaire création campagne avec **React Hook Form**  
-- Page détail campagne avec CTR / CPC  
+- Page détail campagne avec CTR / CPC
+- Validation des données :  
+  - Budget > 0  
+  - StartDate < EndDate  
+  - Name et Advertiser requis  
 - UI moderne et responsive grâce à **Tailwind CSS** 
-- Simulation de clics et impression 
-
+- Simulation automatique avec règles :  
+  - Impression et click incrémentés aléatoirement  
+  - Status passe à `finished` si Date de fin dépassée, Budget épuisé
+     
 ## Installation et lancement
 
 ### Backend
